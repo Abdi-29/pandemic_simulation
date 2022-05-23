@@ -1,29 +1,26 @@
-abstract class GameBoard
+public class Simulation
 {
-     int        grid_size;
-     int        round;
-     int        infection;
-     int        recover;
-     int[][]    map;
-}
-
-public class Simulation  extends GameBoard{
+    private int        grid_size;
+    private int        round;
+    private int        infection;
+    private int        recover;
+    private int[][]    map;
 
     public Simulation(String[] argv)
     {
         parsing(argv);
-        super.grid_size = Integer.parseInt(argv[0]);
-        super.round = Integer.parseInt(argv[1]);
-        super.infection = Integer.parseInt(argv[2]);
-        super.recover = Integer.parseInt(argv[3]);
-        super.map = initGrid();
+        grid_size = Integer.parseInt(argv[0]);
+        round = Integer.parseInt(argv[1]);
+        infection = Integer.parseInt(argv[2]);
+        recover = Integer.parseInt(argv[3]);
+        map = initGrid();
         if (validPoints(argv[argv.length - 1]) == false)
         {
             System.out.println("invalid starting points");
             System.exit(1);
         }
     }
-    public static void parsing(String[] argv)
+    public void parsing(String[] argv)
     {
         if (argv.length != 5) {
             System.out.println("usage: [grid_size] [rounds] [infections] [recovery] [infected person to start with]");
@@ -36,7 +33,7 @@ public class Simulation  extends GameBoard{
         }
     }
 
-    public static boolean   isInvalidInput(String[] argv) {
+    public boolean   isInvalidInput(String[] argv) {
         int len;
         int number;
         String[]  tmp;
@@ -94,7 +91,6 @@ public class Simulation  extends GameBoard{
         if (len % 2 == 1) {
             return false;
         }
-        System.out.println("len " + len);
         for (int i = 0; i < len; i++)
         {
             if (i % 2 == 0)
@@ -144,5 +140,39 @@ public class Simulation  extends GameBoard{
             return -1;
         }
         return number;
+    }
+
+    public int getGrid_size() {
+        return grid_size;
+    }
+
+    public int getRound() {
+        return round;
+    }
+
+    public int getInfection() {
+        return infection;
+    }
+
+    public int getRecover() {
+        return recover;
+    }
+
+    public int[][] getMap() {
+        return map;
+    }
+
+    public int decreaseRound() {
+        return round--;
+    }
+
+    public int[][] nextMap(int[][] board) {
+        map = board;
+        return map;
+    }
+
+    public int  mapLength()
+    {
+        return map.length;
     }
 }

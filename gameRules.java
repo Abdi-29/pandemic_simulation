@@ -1,44 +1,45 @@
 import java.util.Arrays.*;
 import java.util.Arrays;
 
-public class gameRules extends Simulation
+public class gameRules
 {
-    int startPosX;
-    int startPosY;
-    int endPosX;
-    int endPosY;
-    int numberOfInfected;
-    int[][] boardCopy;
+    private int startPosX;
+    private int startPosY;
+    private int endPosX;
+    private int endPosY;
+    private int numberOfInfected;
+    private int[][] boardCopy;
+    Simulation  simulation;
+    Visualiser  visualiser;
 
     public gameRules(String[] argv)
     {
-        super(argv);
-        boardCopy = super.initGrid();
+        simulation = new Simulation(argv);
+        boardCopy = simulation.initGrid();
         System.out.println("---------------start of simulation------------------");
     }
 
     public void startSimulation()
     {
         cloneBoard();
-        while (round > 0) {
-            for (int i = 0; i < grid_size; i++) {
-                for (int j = 0; j < grid_size; j++)
+        while (simulation.getRound() > 0) {
+            for (int i = 0; i < simulation.getGrid_size(); i++) {
+                for (int j = 0; j < simulation.getGrid_size(); j++)
                 {
-                    if (map[i][j] == 0)
+                    if (simulation.getMap()[i][j] == 0)
                     {
-                        if (checkNeighbours(i, j) > infection)
+                        if (checkNeighbours(i, j) > simulation.getInfection())
                             boardCopy[i][j] = 1;
                     }
-                    else if (map[i][j] == 1)
+                    else if (simulation.getMap()[i][j] == 1)
                     {
-                        if (checkNeighbours(i, j) > recover)
+                        if (checkNeighbours(i, j) > simulation.getRecover())
                             boardCopy[i][j] = 2;
                     }
                 }
             }
-//            System.out.println(round);
-            round--;
-            map = boardCopy;
+            simulation.decreaseRound();
+            simulation.nextMap(boardCopy);
         }
         printBoard();
     }
@@ -46,9 +47,9 @@ public class gameRules extends Simulation
     //deep copy of map
     public void cloneBoard()
     {
-        for (int i = 0; i < map.length; i++)
+        for (int i = 0; i < simulation.mapLength(); i++)
         {
-            boardCopy[i] = Arrays.copyOf(map[i], map[i].length);
+            boardCopy[i] = Arrays.copyOf(simulation.getMap()[i], simulation.mapLength());
         }
     }
 
@@ -56,15 +57,15 @@ public class gameRules extends Simulation
     {
         startPosX = Math.max(x - 1, 0);
         startPosY = Math.max(y - 1, 0);
-        endPosX = Math.min(x + 1, grid_size - 1);
-        endPosY = Math.min(y + 1, grid_size - 1);
+        endPosX = Math.min(x + 1, simulation.getGrid_size() - 1);
+        endPosY = Math.min(y + 1, simulation.getGrid_size() - 1);
         numberOfInfected = 0;
         for (int i = startPosX; i <= endPosX; i++)
         {
             for (int j = startPosY; j <= endPosY; j++)
             {
-                if (map[i][j] != 2)
-                    numberOfInfected += map[i][j];
+                if (simulation.getMap()[i][j] != 2)
+                    numberOfInfected += simulation.getMap()[i][j];
             }
         }
         return numberOfInfected;
@@ -72,9 +73,9 @@ public class gameRules extends Simulation
 
     public void printBoard()
     {
-        for (int i = 0; i < grid_size; i++)
+        for (int i = 0; i < simulation.getGrid_size(); i++)
         {
-            for (int j = 0; j < grid_size; j++)
+            for (int j = 0; j < simulation.getGrid_size(); j++)
             {
                 System.out.print(boardCopy[i][j] + "  ");
             }

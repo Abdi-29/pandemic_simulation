@@ -1,19 +1,15 @@
 import javax.swing.*;
-import javax.awt.*;
-import javax.awt.Dimention;
-import javax.awt.Graphics;
-import javax.awt.ActionEvent;
-import javax.awt.ActionListener;
-import javax.swing.JFrame;
+import java.awt.*;
 
 public class Visualiser
 {
     static int      count;
     static boolean  test;
     static JPanel   panel;
-    static Jframe   frame;
+    static JFrame   frame;
 
-    public static void GraphicalInterface(int[][] array, Graphics graphic)
+    public Visualiser() { }
+    public void GraphicalInterface(int[][] array, Graphics graphic)
     {
         int BOX_DIM = 10;
         for (int i = 0; i < array.length; i++)
@@ -37,7 +33,7 @@ public class Visualiser
         }
     }
 
-    public static void printingOut(int[][] array)
+    public void printingOut(int[][] array, gameRules game)
     {
         test = true;
 
@@ -50,13 +46,10 @@ public class Visualiser
         frame.add(panel, BorderLayout.WEST);
         frame.setVisible(true);
 
-
-        while(true) {
-            while(Gui.test) {
-                Graphics graphic = panel.getGraphics();
-                GraphicalInterface(array, graphic);
-                gameRules.startSimulation();
-            }
+        while(Visualiser.test) {
+            Graphics graphic = panel.getGraphics();
+            GraphicalInterface(array, graphic);
+            game.startSimulation();
         }
     }
 }
