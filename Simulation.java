@@ -1,12 +1,13 @@
-public class Simulation
-{
-    private int        grid_size;
-    private int        round;
-    private int        infection;
-    private int        recover;
-    private int[][]    map;
+public class Simulation{
 
-    public Simulation(String[] argv)
+    private final int grid_size;
+    private int round;
+    private final int infection;
+    private final int recover;
+    private int[][] map;
+    GameRules gameRules;
+
+    public Simulation(String[] argv, GameRules gameRules)
     {
         parsing(argv);
         grid_size = Integer.parseInt(argv[0]);
@@ -14,29 +15,29 @@ public class Simulation
         infection = Integer.parseInt(argv[2]);
         recover = Integer.parseInt(argv[3]);
         map = initGrid();
-        if (validPoints(argv[argv.length - 1]) == false)
+        if (!validPoints(argv[argv.length - 1]))
         {
             System.out.println("invalid starting points");
             System.exit(1);
         }
+        this.gameRules = gameRules;
     }
-    public void parsing(String[] argv)
+    public static void parsing(String[] argv)
     {
         if (argv.length != 5) {
             System.out.println("usage: [grid_size] [rounds] [infections] [recovery] [infected person to start with]");
             System.exit(1);
         }
-        if (isInvalidInput(argv) == false)
+        if (!isInvalidInput(argv))
         {
             System.out.println("input must be all integer");
             System.exit(1);
         }
     }
 
-    public boolean   isInvalidInput(String[] argv) {
+    public static boolean   isInvalidInput(String[] argv) {
         int len;
         int number;
-        String[]  tmp;
 
         len = argv.length;
         for (int i = 0; i < len - 1; i++)
@@ -52,9 +53,7 @@ public class Simulation
                 return false;
             }
         }
-        if (argv[len - 1].isEmpty())
-            return false;
-        return true;
+        return !argv[len - 1].isEmpty();
     }
     public int[][]  initGrid()
     {
@@ -73,73 +72,35 @@ public class Simulation
         return grid;
     }
 
-    public boolean  validPoints(String argv)
+    public boolean validPoints(String argv)
     {
-        String[]    tmp;
-        int         len;
-        int         x;
-        int         y;
-
         if (argv.charAt(0) != '[' || argv.charAt(argv.length() - 1) != ']') {
             return false;
         }
         argv = argv.substring(1, argv.length() - 1);
-        tmp = argv.split(",");
-        len = tmp.length;
-        x = 0;
-        y = 0;
-        if (len % 2 == 1) {
-            return false;
-        }
-        for (int i = 0; i < len; i++)
-        {
-            if (i % 2 == 0)
-            {
-                x = stringToInt(tmp[i], '<', 1, tmp[i].length());
-                if (x < 0)
-                    return false;
+        for (String s : argv.split(">,<")) {
+            int x;
+            int y;
+            String[] split = s.split(",");
+            if (split.length != 2)
+                return false;
+            try {
+                if (split[0].startsWith("<"))
+                    x = Integer.parseInt(split[0].substring(1));
+                else
+                    x = Integer.parseInt(split[0]);
+                if (split[1].endsWith(">"))
+                    y = Integer.parseInt(split[1].substring(0, split[1].length() - 1));
+                else
+                    y = Integer.parseInt(split[1]);
+            } catch (NumberFormatException e) {
+                return false;
             }
-            else
-            {
-                y = stringToInt(tmp[i], '>', 0, tmp[i].length());
-                if (y < 0)
-                    return false;
-                map[x][y] = 1;
-            }
+            if (x < 0 || y < 0 || x >= grid_size || y >= grid_size)
+                return false;
+            map[x][y] = 1;
         }
         return true;
-    }
-
-    public int  stringToInt(String input, char sign, int start, int end)
-    {
-        String  tmp;
-        int     number;
-
-        if (start != 0)
-        {
-            if (input.charAt(0) != sign) {
-                return -1;
-            }
-        }
-        else
-        {
-            end -= 1;
-            if (input.charAt(end) != sign) {
-                return -1;
-            }
-        }
-        tmp = input.substring(start, end);
-        try
-        {
-            number = Integer.parseInt(tmp);
-            if (number < 0 || number >= grid_size)
-                return -1;
-        }
-        catch (Exception e)
-        {
-            return -1;
-        }
-        return number;
     }
 
     public int getGrid_size() {
@@ -162,17 +123,11 @@ public class Simulation
         return map;
     }
 
-    public int decreaseRound() {
-        return round--;
+    public void decreaseRound() {
+        round--;
     }
 
-    public int[][] nextMap(int[][] board) {
-        map = board;
-        return map;
-    }
-
-    public int  mapLength()
-    {
-        return map.length;
+    public void setMap(int[][] map) {
+        this.map = map;
     }
 }
