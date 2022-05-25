@@ -24,7 +24,7 @@ The spread of the pandemic is covered by a limited set of rules:
   threshold will become infected
 - Any infected person with more than the recovery threshold infected
   contacts, will recover and become uninfected.
-  - All others don’t change
+- All others don’t change
  
 A “contact” is defined as a person that’s directly adjacent to the infected,
 horizontally, vertically or diagonally (not wrapping around the edges of the grid)
