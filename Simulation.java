@@ -127,7 +127,13 @@ public class Simulation{
         round--;
     }
 
-    public void setMap(int[][] map) {
-        this.map = map;
+    public void setMap(int[][] boardCopy) {
+        for (int i = 0; i < map.length; i++)
+        {
+            for (int j = 0; j < map.length; j++)
+            {
+                map[i][j] = boardCopy[i][j];
+            }
+        }
     }
 }
