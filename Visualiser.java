@@ -8,6 +8,7 @@ public class Visualiser {
     static JPanel   panel;
     static JFrame   frame;
     private int     count;
+    private static final int BOARDER = 1;
 
     GameRules gameRules;
 
@@ -27,10 +28,10 @@ public class Visualiser {
 
     public void GraphicalInterface(int[][] array, Graphics graphic)
     {
-        int BOX_DIM = 700/ array[0].length;
+        int BOX_DIM = 700/ array.length;
         for (int i = 0; i < array.length; i++)
         {
-            for (int j = 0; j < array[0].length; j++)
+            for (int j = 0; j < array.length; j++)
             {
                 if(array[i][j] == 0)
                 {
@@ -38,27 +39,20 @@ public class Visualiser {
                 }
                 else if(array[i][j] == 1)
                 {
-                    graphic.setColor(Color.BLACK);
+                    graphic.setColor(Color.RED);
                 }
                 else if(array[i][j] == 2)
                 {
-                    graphic.setColor(Color.RED);
+                    graphic.setColor(Color.GREEN);
                 }
-                graphic.fillRect(j  * BOX_DIM, i * BOX_DIM, BOX_DIM -5, BOX_DIM -5);
+                graphic.fillRect(j  * BOX_DIM, i * BOX_DIM, BOX_DIM - BOARDER, BOX_DIM - BOARDER);
             }
         }
     }
 
     public void printingOut(int[][] array)
     {
-        test = true;
-        count = 0;
-
-
-
-
-            Graphics graphic = panel.getGraphics();
-            GraphicalInterface(array, graphic);
-//            gameRules.startSimulation();
+        Graphics graphic = panel.getGraphics();
+        GraphicalInterface(array, graphic);
     }
 }

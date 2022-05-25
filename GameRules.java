@@ -20,10 +20,10 @@ public class GameRules{
     public void startSimulation()
     {
         visualiser = new Visualiser(this);
-        cloneBoard();
         while (simulation.getRound() > 0)
         {
-            printBoard();
+            cloneBoard();
+//            printBoard();
             for (int i = 0; i < simulation.getGrid_size(); i++)
             {
                 for (int j = 0; j < simulation.getGrid_size(); j++)
@@ -38,13 +38,13 @@ public class GameRules{
                         if (checkNeighbours(i, j) > simulation.getRecover())
                             boardCopy[i][j] = 2;
                     }
-                    visualiser.printingOut(boardCopy);
                 }
             }
-            System.out.println("hello there " + simulation.getRound());
+            visualiser.printingOut(boardCopy);
+//            System.out.println("hello there " + simulation.getRound());
             try {
 
-                Thread.sleep(3000);
+                Thread.sleep(50);
             }
             catch (InterruptedException e)
             {
@@ -61,7 +61,10 @@ public class GameRules{
     {
         for (int i = 0; i < simulation.getMap().length; i++)
         {
-            boardCopy[i] = Arrays.copyOf(simulation.getMap()[i], simulation.getMap()[i].length);
+            for (int j = 0; j < simulation.getMap().length; j++)
+            {
+                boardCopy[i][j] = simulation.getMap()[i][j];
+            }
         }
     }
 
