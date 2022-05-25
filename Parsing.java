@@ -1,15 +1,15 @@
-public class Simulation{
+public class Parsing{
 
     private final int grid_size;
     private int round;
     private final int infection;
     private final int recover;
     private int[][] map;
-    GameRules gameRules;
+    Rules rules;
 
-    public Simulation(String[] argv, GameRules gameRules)
+    public Parsing(String[] argv, Rules rules)
     {
-        parsing(argv);
+        parser(argv);
         grid_size = Integer.parseInt(argv[0]);
         round = Integer.parseInt(argv[1]);
         infection = Integer.parseInt(argv[2]);
@@ -20,11 +20,12 @@ public class Simulation{
             System.out.println("invalid starting points");
             System.exit(1);
         }
-        this.gameRules = gameRules;
+        this.rules = rules;
     }
-    public static void parsing(String[] argv)
+    public void parser(String[] argv)
     {
-        if (argv.length != 5) {
+        if (argv.length != 5)
+        {
             System.out.println("usage: [grid_size] [rounds] [infections] [recovery] [infected person to start with]");
             System.exit(1);
         }
@@ -35,7 +36,8 @@ public class Simulation{
         }
     }
 
-    public static boolean   isInvalidInput(String[] argv) {
+    public boolean   isInvalidInput(String[] argv)
+    {
         int len;
         int number;
 
@@ -44,12 +46,14 @@ public class Simulation{
         {
             if (argv[i] == null)
                 return false;
-            try {
+            try
+            {
                 number = Integer.parseInt(argv[i]);
                 if (number < 0)
                     return false;
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 return false;
             }
         }
@@ -74,17 +78,20 @@ public class Simulation{
 
     public boolean validPoints(String argv)
     {
-        if (argv.charAt(0) != '[' || argv.charAt(argv.length() - 1) != ']') {
+        if (argv.charAt(0) != '[' || argv.charAt(argv.length() - 1) != ']')
+        {
             return false;
         }
         argv = argv.substring(1, argv.length() - 1);
-        for (String s : argv.split(">,<")) {
+        for (String s : argv.split(">,<"))
+        {
             int x;
             int y;
             String[] split = s.split(",");
             if (split.length != 2)
                 return false;
-            try {
+            try
+            {
                 if (split[0].startsWith("<"))
                     x = Integer.parseInt(split[0].substring(1));
                 else
@@ -93,7 +100,9 @@ public class Simulation{
                     y = Integer.parseInt(split[1].substring(0, split[1].length() - 1));
                 else
                     y = Integer.parseInt(split[1]);
-            } catch (NumberFormatException e) {
+            }
+            catch (NumberFormatException e)
+            {
                 return false;
             }
             if (x < 0 || y < 0 || x >= grid_size || y >= grid_size)
@@ -103,31 +112,38 @@ public class Simulation{
         return true;
     }
 
-    public int getGrid_size() {
+    public int getGrid_size()
+    {
         return grid_size;
     }
 
-    public int getRound() {
+    public int getRound()
+    {
         return round;
     }
 
-    public int getInfection() {
+    public int getInfection()
+    {
         return infection;
     }
 
-    public int getRecover() {
+    public int getRecover()
+    {
         return recover;
     }
 
-    public int[][] getMap() {
+    public int[][] getMap()
+    {
         return map;
     }
 
-    public void decreaseRound() {
+    public void decreaseRound()
+    {
         round--;
     }
 
-    public void setMap(int[][] boardCopy) {
+    public void setMap(int[][] boardCopy)
+    {
         for (int i = 0; i < map.length; i++)
         {
             for (int j = 0; j < map.length; j++)

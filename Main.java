@@ -1,11 +1,10 @@
 import java.io.*;
-class Main {
-    public static void main(String[] argv) {
-        GameRules  game = new GameRules(argv);
-        Visualiser   visualiser;
+class Main
+{
+    public static void main(String[] argv)
+    {
+        Rules  rule = new Rules(argv);
 
-        game.startSimulation();
-//        visualiser = new Visualiser(game);
-//        visualiser.printingOut(game.simulation.getMap());
+        rule.startSimulation();
     }
 }

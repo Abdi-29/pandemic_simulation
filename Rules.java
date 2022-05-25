@@ -1,47 +1,46 @@
 import java.util.Arrays;
 
-public class GameRules{
+public class Rules{
     private int startPosX;
     private int startPosY;
     private int endPosX;
     private int endPosY;
     private int numberOfInfected;
     private int[][] boardCopy;
-    Simulation simulation;
+    Parsing parsing;
     Visualiser  visualiser;
 
-    public GameRules(String[] argv)
+    public Rules(String[] argv)
     {
-        simulation = new Simulation(argv, this);
-        boardCopy = simulation.initGrid();
+        parsing = new Parsing(argv, this);
+        boardCopy = parsing.initGrid();
         System.out.println("---------------start of simulation------------------");
     }
 
     public void startSimulation()
     {
         visualiser = new Visualiser(this);
-        while (simulation.getRound() > 0)
+        while (parsing.getRound() > 0)
         {
             cloneBoard();
 //            printBoard();
-            for (int i = 0; i < simulation.getGrid_size(); i++)
+            for (int i = 0; i < parsing.getGrid_size(); i++)
             {
-                for (int j = 0; j < simulation.getGrid_size(); j++)
+                for (int j = 0; j < parsing.getGrid_size(); j++)
                 {
-                    if (simulation.getMap()[i][j] == 0)
+                    if (parsing.getMap()[i][j] == 0)
                     {
-                        if (checkNeighbours(i, j) > simulation.getInfection())
+                        if (checkNeighbours(i, j) > parsing.getInfection())
                             boardCopy[i][j] = 1;
                     }
-                    else if (simulation.getMap()[i][j] == 1)
+                    else if (parsing.getMap()[i][j] == 1)
                     {
-                        if (checkNeighbours(i, j) > simulation.getRecover())
+                        if (checkNeighbours(i, j) > parsing.getRecover())
                             boardCopy[i][j] = 2;
                     }
                 }
             }
             visualiser.printingOut(boardCopy);
-//            System.out.println("hello there " + simulation.getRound());
             try {
 
                 Thread.sleep(50);
@@ -50,20 +49,19 @@ public class GameRules{
             {
                 Thread.currentThread().interrupt();
             }
-            simulation.decreaseRound();
-            simulation.setMap(boardCopy);
+            parsing.decreaseRound();
+            parsing.setMap(boardCopy);
         }
 //        printBoard();
     }
 
-    //deep copy of map
     public void cloneBoard()
     {
-        for (int i = 0; i < simulation.getMap().length; i++)
+        for (int i = 0; i < parsing.getMap().length; i++)
         {
-            for (int j = 0; j < simulation.getMap().length; j++)
+            for (int j = 0; j < parsing.getMap().length; j++)
             {
-                boardCopy[i][j] = simulation.getMap()[i][j];
+                boardCopy[i][j] = parsing.getMap()[i][j];
             }
         }
     }
@@ -72,15 +70,15 @@ public class GameRules{
     {
         startPosX = Math.max(x - 1, 0);
         startPosY = Math.max(y - 1, 0);
-        endPosX = Math.min(x + 1, simulation.getGrid_size() - 1);
-        endPosY = Math.min(y + 1, simulation.getGrid_size() - 1);
+        endPosX = Math.min(x + 1, parsing.getGrid_size() - 1);
+        endPosY = Math.min(y + 1, parsing.getGrid_size() - 1);
         numberOfInfected = 0;
         for (int i = startPosX; i <= endPosX; i++)
         {
             for (int j = startPosY; j <= endPosY; j++)
             {
-                if (simulation.getMap()[i][j] != 2)
-                    numberOfInfected += simulation.getMap()[i][j];
+                if (parsing.getMap()[i][j] != 2)
+                    numberOfInfected += parsing.getMap()[i][j];
             }
         }
         return numberOfInfected;
@@ -88,9 +86,9 @@ public class GameRules{
 
     public void printBoard()
     {
-        for (int i = 0; i < simulation.getGrid_size(); i++)
+        for (int i = 0; i < parsing.getGrid_size(); i++)
         {
-            for (int j = 0; j < simulation.getGrid_size(); j++)
+            for (int j = 0; j < parsing.getGrid_size(); j++)
             {
                 System.out.print(boardCopy[i][j] + "  ");
             }

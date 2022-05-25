@@ -2,28 +2,24 @@ import javax.swing.*;
 import javax.swing.JFrame;
 import java.awt.*;
 
-public class Visualiser {
-
-    static boolean  test;
+public class Visualiser
+{
     static JPanel   panel;
     static JFrame   frame;
-    private int     count;
-    private static final int BOARDER = 1;
+    private static final int BORDER = 1;
 
-    GameRules gameRules;
+    Rules rules;
 
-    public Visualiser(GameRules gameRules) {
+    public Visualiser(Rules rules)
+    {
         frame = new JFrame("pandemic simulation");
         frame.setSize(720,720);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         panel = new JPanel();
         panel.setPreferredSize(new Dimension(700, 700));
         frame.add(panel, BorderLayout.CENTER);
         frame.setVisible(true);
-        this.gameRules = gameRules;
-//        printingOut(gameRules.simulation.getMap());
-//        gameRules.printBoard();
+        this.rules = rules;
     }
 
     public void GraphicalInterface(int[][] array, Graphics graphic)
@@ -45,7 +41,7 @@ public class Visualiser {
                 {
                     graphic.setColor(Color.GREEN);
                 }
-                graphic.fillRect(j  * BOX_DIM, i * BOX_DIM, BOX_DIM - BOARDER, BOX_DIM - BOARDER);
+                graphic.fillRect(j  * BOX_DIM, i * BOX_DIM, BOX_DIM - BORDER, BOX_DIM - BORDER);
             }
         }
     }
